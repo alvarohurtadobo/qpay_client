@@ -16,7 +16,7 @@ class MyApp extends StatelessWidget {
     Responsive.initSizes(size.width, size.height);
     
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'QPay client',
       theme: ThemeData(
         // This is the theme of your application.
         //

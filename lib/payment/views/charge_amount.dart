@@ -135,7 +135,6 @@ class _ChargeAmountPageState extends State<ChargeAmountPage> {
                 myBackButton(() {
                   setState(() {
                     amount = (amount / 10 *100).toInt()/100;
-                  print("newamount is $amount");
                   });
                 })
               ],

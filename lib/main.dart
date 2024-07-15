@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:qpay_client/common/responsive.dart';
 import 'package:qpay_client/routes.dart';
-import 'package:qpay_client/user/views/login.dart';
+import 'package:qpay_client/common/responsive.dart';
 
 void main() {
   runApp(const MyApp());

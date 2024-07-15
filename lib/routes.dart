@@ -1,17 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:qpay_client/user/views/home.dart';
 import 'package:qpay_client/user/views/login.dart';
+import 'package:qpay_client/user/views/register.dart';
 import 'package:qpay_client/payment/views/qr_view.dart';
 import 'package:qpay_client/payment/views/register.dart';
 import 'package:qpay_client/payment/views/device_added.dart';
 import 'package:qpay_client/payment/views/charge_amount.dart';
+import 'package:qpay_client/user/views/recover_passwords.dart';
 import 'package:qpay_client/payment/views/last_transactions.dart';
 
 Route<dynamic> onGenerateRoute(RouteSettings settings) {
-  print("On generate route with name: ${settings.name}");
   switch (settings.name) {
     case '/':
       return MaterialPageRoute(builder: (_) => const LoginPage());
+    case '/recover':
+      return MaterialPageRoute(builder: (_) => const RecoverPasswordPage());
+    case '/register':
+      return MaterialPageRoute(builder: (_) => const RegisterPage());
     case '/home':
       return MaterialPageRoute(builder: (_) => const HomePage());
     case '/register_device':

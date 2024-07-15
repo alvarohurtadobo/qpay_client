@@ -11,6 +11,8 @@ class ChargeAmountPage extends StatefulWidget {
 }
 
 class _ChargeAmountPageState extends State<ChargeAmountPage> {
+  double amount = 0;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -43,46 +45,101 @@ class _ChargeAmountPageState extends State<ChargeAmountPage> {
                   border: Border.all(color: Colors.black, width: 1),
                   color: Colors.white),
               alignment: Alignment.center,
-              child: const Text(
-                "\$ 0.00",
-                style: TextStyle(color: Colors.grey),
+              child: Text(
+                "\$ ${amount.toStringAsFixed(2)}",
+                style: const TextStyle(color: Colors.grey),
               ),
             ),
             const SizedBox(height: 20),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                myButton("1"),
+                myButton(1, (digit) {
+                  setState(() {
+                    amount = amount * 10 + digit / 100;
+                  });
+                  print("newamount is $amount");
+                }),
                 const SizedBox(width: 20),
-                myButton("2"),
+                myButton(2, (digit) {
+                  setState(() {
+                    amount = amount * 10 + digit / 100;
+                  });
+                }),
                 const SizedBox(width: 20),
-                myButton("3"),
+                myButton(3, (digit) {
+                  setState(() {
+                    amount = amount * 10 + digit / 100;
+                  });
+                }),
               ],
             ),
             const SizedBox(height: 20),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                myButton("4"),
+                myButton(4, (digit) {
+                  setState(() {
+                    amount = amount * 10 + digit / 100;
+                  });
+                }),
                 const SizedBox(width: 20),
-                myButton("5"),
+                myButton(5, (digit) {
+                  setState(() {
+                    amount = amount * 10 + digit / 100;
+                  });
+                }),
                 const SizedBox(width: 20),
-                myButton("6"),
+                myButton(6, (digit) {
+                  setState(() {
+                    amount = amount * 10 + digit/ 100;
+                  });
+                }),
               ],
             ),
             const SizedBox(height: 20),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                myButton("7"),
+                myButton(7, (digit) {
+                  setState(() {
+                    amount = amount * 10 + digit / 100;
+                  });
+                }),
                 const SizedBox(width: 20),
-                myButton("8"),
+                myButton(8, (digit) {
+                  setState(() {
+                    amount = amount * 10 + digit / 100;
+                  });
+                }),
                 const SizedBox(width: 20),
-                myButton("9"),
+                myButton(9, (digit) {
+                  setState(() {
+                    amount = amount * 10 + digit / 100;
+                  });
+                }),
               ],
             ),
             const SizedBox(height: 20),
-            myButton("0"),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                placeHolder(),
+                const SizedBox(width: 20),
+                myButton(0, (digit) {
+                  setState(() {
+                    amount = amount * 10;
+                  });
+                }),
+                const SizedBox(width: 20),
+                myBackButton(() {
+                  setState(() {
+                    amount = (amount / 10 *100).toInt()/100;
+                  print("newamount is $amount");
+                  });
+                })
+              ],
+            ),
             const SizedBox(height: 40),
             GestureDetector(
               onTap: () {

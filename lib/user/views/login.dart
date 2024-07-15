@@ -9,6 +9,9 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  bool hidden = true;
+  final _formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,62 +40,98 @@ class _LoginPageState extends State<LoginPage> {
                 alignment: Alignment.centerLeft,
                 child: const Text(
                   "Login",
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 26),
                 )),
             const SizedBox(height: 40),
-            Container(
-                width: Responsive.width - 2 * Responsive.padding,
-                alignment: Alignment.centerLeft,
-                child: const Text(
-                  "Usuario",
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 14,
-                      color: Color(0xfff85f6a)),
-                )),
-            const TextField(),
-            const SizedBox(height: 10),
-            Container(
-                width: Responsive.width - 2 * Responsive.padding,
-                alignment: Alignment.centerLeft,
-                child: const Text(
-                  "Password",
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 14,
-                      color: Color(0xfff85f6a)),
-                )),
-            const TextField(
-              obscureText: true,
-              decoration: InputDecoration(
-                  suffixIcon: Icon(
-                Icons.remove_red_eye,
-                color: Colors.grey,
-              )),
-            ),
-            const SizedBox(height: 40),
-            GestureDetector(
-              onTap: () {
-                Navigator.of(context).pushNamed('/home');
-              },
-              child: Container(
-                width: Responsive.width - 2 * Responsive.padding,
-                height: 36,
-                alignment: Alignment.center,
-                padding: EdgeInsets.symmetric(horizontal: Responsive.padding),
-                decoration: const BoxDecoration(
-                    color: Color(0xfff85f6a),
-                    borderRadius: BorderRadius.all(Radius.circular(6))),
-                child: const Text(
-                  "Acceder",
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18,
-                      color: Colors.white),
-                ),
+            Form(
+              key: _formKey,
+              child: Column(
+                children: [
+                  Container(
+                      width: Responsive.width - 2 * Responsive.padding,
+                      alignment: Alignment.centerLeft,
+                      child: const Text(
+                        "Usuario",
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 14,
+                            color: Color(0xfff85f6a)),
+                      )),
+                  TextFormField(
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return "Este campo es obligatorio";
+                      }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(height: 10),
+                  Container(
+                      width: Responsive.width - 2 * Responsive.padding,
+                      alignment: Alignment.centerLeft,
+                      child: const Text(
+                        "Password",
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 14,
+                            color: Color(0xfff85f6a)),
+                      )),
+                  TextFormField(
+                    obscureText: hidden,
+                    validator: (value) {
+                      if (value == null) {
+                        return null;
+                      }
+                      if (value.length < 8) {
+                        return "Este campo debe tener al menos 8 carácteres";
+                      }
+                      return null;
+                    },
+                    decoration: InputDecoration(
+                        suffixIcon: GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          hidden = !hidden;
+                        });
+                      },
+                      child: Icon(
+                        hidden
+                            ? Icons.remove_red_eye_outlined
+                            : Icons.remove_red_eye,
+                        color: Colors.grey,
+                      ),
+                    )),
+                  ),
+                  const SizedBox(height: 40),
+                  GestureDetector(
+                    onTap: () {
+                      // bool? success = _formKey.currentState?.validate();
+                      // if (success == true) {
+                        Navigator.of(context).pushNamed('/home');
+                      // }
+                    },
+                    child: Container(
+                      width: Responsive.width - 2 * Responsive.padding,
+                      height: 36,
+                      alignment: Alignment.center,
+                      padding:
+                          EdgeInsets.symmetric(horizontal: Responsive.padding),
+                      decoration: const BoxDecoration(
+                          color: Color(0xfff85f6a),
+                          borderRadius: BorderRadius.all(Radius.circular(6))),
+                      child: const Text(
+                        "Acceder",
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 18,
+                            color: Colors.white),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
-            const SizedBox(height: 10),
+            const SizedBox(height: 20),
             const Text(
               "ó acceder con redes sociales",
               style: TextStyle(
@@ -100,7 +139,7 @@ class _LoginPageState extends State<LoginPage> {
                   fontSize: 16,
                   color: Colors.grey),
             ),
-            const SizedBox(height: 40),
+            const SizedBox(height: 20),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -152,23 +191,33 @@ class _LoginPageState extends State<LoginPage> {
               ],
             ),
             const SizedBox(height: 40),
-            const Row(
+            Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  "¿Olvidó su contraseña?",
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
-                      color: Colors.grey),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.of(context).pushNamed('/recover');
+                  },
+                  child: const Text(
+                    "¿Olvidó su contraseña?",
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                        color: Colors.grey),
+                  ),
                 ),
-                SizedBox(width: 20),
-                Text(
-                  "Registrarse",
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
-                      color: Color(0xfff85f6a)),
+                const SizedBox(width: 20),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.of(context).pushNamed('/register');
+                  },
+                  child: const Text(
+                    "Registrarse",
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                        color: Color(0xfff85f6a)),
+                  ),
                 )
               ],
             ),

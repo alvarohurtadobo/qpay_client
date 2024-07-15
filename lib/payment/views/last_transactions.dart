@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:qpay_client/common/components/listTile.dart';
 import 'package:qpay_client/common/drawer.dart';
 import 'package:qpay_client/common/responsive.dart';
 
@@ -16,12 +17,12 @@ class _TransactionHistoryPageState extends State<TransactionHistoryPage> {
       appBar: AppBar(),
       drawer: myDrawer(context),
       body: Container(
-        padding: EdgeInsets.all(Responsive.padding),
+        padding: EdgeInsets.symmetric(vertical: Responsive.padding),
         child: Column(
           children: [
             const SizedBox(height: 50),
             Container(
-              width: Responsive.width - 2 * Responsive.padding,
+              width: Responsive.width,
               height: 100,
               decoration: const BoxDecoration(
                   image: DecorationImage(
@@ -35,23 +36,11 @@ class _TransactionHistoryPageState extends State<TransactionHistoryPage> {
                   color: Colors.grey),
             ),
             const SizedBox(height: 40),
-            const ListTile(
-              leading: Icon(Icons.pending, color: Color(0xfff85f6a)),
-              title: Text("\$200.00"),
-              subtitle: Text("Supermercado Fidalga"),
-            ),
-            const SizedBox(height: 10),
-            const ListTile(
-              leading: Icon(Icons.timer, color: Color(0xfff85f6a)),
-              title: Text("\$200.00"),
-              subtitle: Text("Supermercado Ktal"),
-            )
-            ,const SizedBox(height: 10),
-            const ListTile(
-              leading: Icon(Icons.timer, color: Color(0xfff85f6a)),
-              title: Text("\$20.00"),
-              subtitle: Text("Panaderia"),
-            )
+            getTile("\$300.00", "Supermercado Fidalga", "2024-07-01",
+                Icons.pending),
+            getTile("\$200.00", "Supermercado Ktal", "2024-06-08", Icons.timer),
+            getTile("\$100.00", "Heladeria", "2024-05-08", Icons.timer),
+            getTile("\$30.00", "Panaderia", "2024-04-08", Icons.timer),
           ],
         ),
       ),

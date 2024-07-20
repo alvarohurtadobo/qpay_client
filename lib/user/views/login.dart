@@ -105,10 +105,10 @@ class _LoginPageState extends State<LoginPage> {
                   const SizedBox(height: 40),
                   GestureDetector(
                     onTap: () {
-                      // bool? success = _formKey.currentState?.validate();
-                      // if (success == true) {
+                      bool? success = _formKey.currentState?.validate();
+                      if (success == true) {
                         Navigator.of(context).pushNamed('/home');
-                      // }
+                      }
                     },
                     child: Container(
                       width: Responsive.width - 2 * Responsive.padding,

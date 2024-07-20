@@ -16,6 +16,8 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
+        width: Responsive.width,
+        height: Responsive.height,
         padding: EdgeInsets.all(Responsive.padding),
         child: Column(
           children: [

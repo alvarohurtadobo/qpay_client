@@ -5,6 +5,7 @@ import 'package:qpay_client/firebase_options.dart';
 import 'package:qpay_client/common/responsive.dart';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );

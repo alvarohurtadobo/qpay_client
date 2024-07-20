@@ -1,4 +1,6 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:qpay_client/common/responsive.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -14,6 +16,8 @@ class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
   String? username;
   String? password;
+
+  ValueNotifier userCredential = ValueNotifier('');
 
   @override
   void initState() {
@@ -170,49 +174,97 @@ class _LoginPageState extends State<LoginPage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Container(
-                  width: Responsive.width / 3,
-                  height: 36,
-                  alignment: Alignment.center,
-                  padding: EdgeInsets.symmetric(horizontal: Responsive.padding),
-                  decoration: const BoxDecoration(
-                      color: Color(0xff1da1f2),
-                      borderRadius: BorderRadius.all(Radius.circular(6))),
-                  child: Row(
-                    children: [
-                      Container(
-                        height: 30,
-                        width: 30,
-                        decoration: const BoxDecoration(
-                            image: DecorationImage(
-                                image:
-                                    AssetImage('assets/images/twitter.jpeg'))),
-                      ),
-                      const Text(
-                        "Twitter",
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 12,
-                            color: Colors.white),
-                      ),
-                    ],
+                GestureDetector(
+                  onTap: () async {
+                    userCredential.value = await signInWithGoogle();
+                    if (userCredential.value != null) {
+                      print(
+                          "User all received is: ${userCredential.value.user!}");
+                      print(
+                          "User email received is: ${userCredential.value.user!.email}");
+                    }else{
+                      print(
+                          "User all received is: null");
+                    }
+                  },
+                  child: Container(
+                    width: Responsive.width / 3,
+                    height: 36,
+                    alignment: Alignment.center,
+                    padding: EdgeInsets.symmetric(
+                        horizontal: Responsive.padding / 2),
+                    decoration: const BoxDecoration(
+                        color: Color(0xff131314),
+                        borderRadius: BorderRadius.all(Radius.circular(6))),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(
+                          height: 24,
+                          width: 24,
+                          decoration: const BoxDecoration(
+                              image: DecorationImage(
+                                  image: AssetImage(
+                                      'assets/images/google_icon.png'))),
+                        ),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        const Text(
+                          "Google",
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 12,
+                              color: Colors.white),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
+                // Center(
+                //   child: Card(
+                //     elevation: 5,
+                //     shape: RoundedRectangleBorder(
+                //         borderRadius: BorderRadius.circular(10)),
+                //     child: IconButton(
+                //       iconSize: 40,
+                //       icon: Image.asset(
+                //         'assets/images/google_icon.png',
+                //       ),
+                //       onPressed: () async {
+                //         userCredential.value = await signInWithGoogle();
+                //         if (userCredential.value != null){
+                //           print(
+                //               "User email received is: ${userCredential.value.user!.email}");}
+                //       },
+                //     ),
+                //   ),
+                // ),
                 const SizedBox(width: 20),
-                Container(
-                  width: Responsive.width / 3,
-                  height: 36,
-                  alignment: Alignment.center,
-                  padding: EdgeInsets.symmetric(horizontal: Responsive.padding),
-                  decoration: const BoxDecoration(
-                      color: Color(0xff0165e1),
-                      borderRadius: BorderRadius.all(Radius.circular(6))),
-                  child: const Text(
-                    "Facebook",
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 12,
-                        color: Colors.white),
+                GestureDetector(
+                  onTap: () async {
+                    userCredential.value = await signInWithGoogle();
+                    if (userCredential.value != null) {
+                      print(
+                          "User email received is: ${userCredential.value.user!.email}");
+                    }
+                  },
+                  child: Container(
+                    width: Responsive.width / 3,
+                    height: 36,
+                    alignment: Alignment.center,
+                    padding: EdgeInsets.symmetric(
+                        horizontal: Responsive.padding / 2),
+                    decoration: const BoxDecoration(
+                        color: Color(0xff0165e1),
+                        borderRadius: BorderRadius.all(Radius.circular(6))),
+                    child: const Text(
+                      "Facebook",
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 12,
+                          color: Colors.white),
+                    ),
                   ),
                 ),
               ],
@@ -252,5 +304,32 @@ class _LoginPageState extends State<LoginPage> {
         ),
       ),
     );
+  }
+}
+
+Future<dynamic> signInWithGoogle() async {
+  try {
+    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+
+    final GoogleSignInAuthentication? googleAuth =
+        await googleUser?.authentication;
+
+    final credential = GoogleAuthProvider.credential(
+      accessToken: googleAuth?.accessToken,
+      idToken: googleAuth?.idToken,
+    );
+
+    return await FirebaseAuth.instance.signInWithCredential(credential);
+  } on Exception catch (e) {
+    print('exception->$e');
+  }
+}
+
+Future<bool> signOutFromGoogle() async {
+  try {
+    await FirebaseAuth.instance.signOut();
+    return true;
+  } on Exception catch (_) {
+    return false;
   }
 }

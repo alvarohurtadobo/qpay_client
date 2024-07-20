@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "184831115274",
+    "project_id": "qpay-pos",
+    "storage_bucket": "qpay-pos.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:184831115274:android:e487e1a70d3b7ef12adff3",
+        "android_client_info": {
+          "package_name": "com.qpay.qpay_client"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDT5NPy_R3ebTSG5DpWCVRsfkFZSSUk9S4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

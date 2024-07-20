@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:qpay_client/routes.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:qpay_client/firebase_options.dart';
 import 'package:qpay_client/common/responsive.dart';
 
-void main() {
+void main() async {
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const MyApp());
 }
 
@@ -14,7 +19,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     Responsive.initSizes(size.width, size.height);
-    
+
     return MaterialApp(
       title: 'QPay client',
       theme: ThemeData(

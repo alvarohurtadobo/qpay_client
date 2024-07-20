@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 Widget myDrawer(BuildContext context) {
   return Drawer(
@@ -20,7 +21,8 @@ Widget myDrawer(BuildContext context) {
                   color: Colors.grey,
                   fontSize: 24,
                 ),
-              ),Text(
+              ),
+              Text(
                 'johana@gmail.com',
                 style: TextStyle(
                   color: Colors.grey,
@@ -31,7 +33,7 @@ Widget myDrawer(BuildContext context) {
           ),
         ),
         ListTile(
-          leading:const Icon(Icons.home),
+          leading: const Icon(Icons.home),
           title: const Text('Inicio'),
           onTap: () {
             Navigator.of(context).pushReplacementNamed('/home');
@@ -41,27 +43,35 @@ Widget myDrawer(BuildContext context) {
           leading: const Icon(Icons.device_unknown_outlined),
           title: const Text('Registrar dispositivo'),
           onTap: () {
-            Navigator.of(context).pushReplacementNamed('/register_device');
+            Navigator.of(context).pop();
+            Navigator.of(context).pushNamed('/register_device');
           },
         ),
         ListTile(
-          leading:const Icon(Icons.charging_station),
-          title:const Text('Realizar recarga'),
+          leading: const Icon(Icons.charging_station),
+          title: const Text('Realizar recarga'),
           onTap: () {
-            Navigator.of(context).pushReplacementNamed('/charge_amount');
+            Navigator.of(context).pop();
+            Navigator.of(context).pushNamed('/charge_amount');
           },
         ),
         ListTile(
-          leading:const Icon(Icons.history),
+          leading: const Icon(Icons.history),
           title: const Text('Historial de recargas'),
           onTap: () {
-            Navigator.of(context).pushReplacementNamed('/transaction_history');
+            Navigator.of(context).pop();
+            Navigator.of(context).pushNamed('/transaction_history');
           },
         ),
         ListTile(
           leading: const Icon(Icons.exit_to_app),
           title: const Text('Salir'),
           onTap: () {
+            SharedPreferences.getInstance().then((prefs) {
+              prefs.remove('username');
+              prefs.remove('password');
+              debugPrint("Cleared shared prefernces");
+            });
             Navigator.of(context).pushReplacementNamed('/');
           },
         ),

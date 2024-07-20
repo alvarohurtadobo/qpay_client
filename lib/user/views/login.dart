@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:qpay_client/common/responsive.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -11,6 +12,24 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   bool hidden = true;
   final _formKey = GlobalKey<FormState>();
+  String? username;
+  String? password;
+
+  @override
+  void initState() {
+    SharedPreferences.getInstance().then((prefs) {
+      username = prefs.getString('username');
+      password = prefs.getString('password');
+      debugPrint("Recovered shared prefernces to $username and $password");
+      if (username != null &&
+          username != "" &&
+          password != null &&
+          password != "") {
+        Navigator.of(context).pushReplacementNamed('/home');
+      }
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -109,6 +128,12 @@ class _LoginPageState extends State<LoginPage> {
                     onTap: () {
                       bool? success = _formKey.currentState?.validate();
                       if (success == true) {
+                        SharedPreferences.getInstance().then((prefs) {
+                          prefs.setString('username', username ?? "");
+                          prefs.setString('password', password ?? "");
+                          debugPrint(
+                              "Set shared prefernces to $username and $password");
+                        });
                         Navigator.of(context).pushNamed('/home');
                       }
                     },

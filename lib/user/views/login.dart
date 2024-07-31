@@ -1,8 +1,10 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:qpay_client/common/toast.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:qpay_client/common/responsive.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:qpay_client/common/services/repository.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -17,12 +19,17 @@ class _LoginPageState extends State<LoginPage> {
   String? username;
   String? password;
 
+  bool loading = false;
+
+  TextEditingController emailController = TextEditingController();
+
   ValueNotifier userCredential = ValueNotifier('');
 
   @override
   void initState() {
     SharedPreferences.getInstance().then((prefs) {
       username = prefs.getString('username');
+      emailController.text = username ?? "";
       password = prefs.getString('password');
       debugPrint("Recovered shared prefernces to $username and $password");
       if (username != null &&
@@ -83,6 +90,10 @@ class _LoginPageState extends State<LoginPage> {
                             color: Color(0xfff85f6a)),
                       )),
                   TextFormField(
+                    onChanged: (val) {
+                      username = val;
+                    },
+                    controller: emailController,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return "Este campo es obligatorio";
@@ -103,6 +114,9 @@ class _LoginPageState extends State<LoginPage> {
                       )),
                   TextFormField(
                     obscureText: hidden,
+                    onChanged: (val) {
+                      password = val;
+                    },
                     validator: (value) {
                       if (value == null) {
                         return null;
@@ -129,16 +143,41 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   const SizedBox(height: 40),
                   GestureDetector(
-                    onTap: () {
+                    onTap: () async {
+                      if (loading) {
+                        return;
+                      }
                       bool? success = _formKey.currentState?.validate();
                       if (success == true) {
-                        SharedPreferences.getInstance().then((prefs) {
-                          prefs.setString('username', username ?? "");
-                          prefs.setString('password', password ?? "");
-                          debugPrint(
-                              "Set shared prefernces to $username and $password");
+                        setState(() {
+                          loading = true;
                         });
-                        Navigator.of(context).pushNamed('/home');
+                        final response = await apiService.postRequest(
+                            'login_check', {
+                          "email": username,
+                          "password": password
+                        }).catchError((err) {
+                          showToast("Error de credenciales", error: true);
+                          setState(() {
+                            loading = false;
+                          });
+                        });
+                        if (response.statusCode == 200) {
+                          print("Response is ${response.data}");
+                          SharedPreferences.getInstance().then((prefs) {
+                            prefs.setString('username', username ?? "");
+                            prefs.setString('password', password ?? "");
+                            // prefs.setString('jwt', response.data);
+                            debugPrint(
+                                "Set shared prefernces to $username and $password");
+                          });
+                          Navigator.of(context).pushNamed('/home');
+                        } else {
+                          showToast("Error de credenciales", error: true);
+                        }
+                        setState(() {
+                          loading = false;
+                        });
                       }
                     },
                     child: Container(
@@ -150,13 +189,19 @@ class _LoginPageState extends State<LoginPage> {
                       decoration: const BoxDecoration(
                           color: Color(0xfff85f6a),
                           borderRadius: BorderRadius.all(Radius.circular(6))),
-                      child: const Text(
-                        "Acceder",
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18,
-                            color: Colors.white),
-                      ),
+                      child: loading
+                          ? const Center(
+                              child: CircularProgressIndicator(
+                                color: Colors.white,
+                              ),
+                            )
+                          : const Text(
+                              "Acceder",
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 18,
+                                  color: Colors.white),
+                            ),
                     ),
                   ),
                 ],
@@ -182,9 +227,8 @@ class _LoginPageState extends State<LoginPage> {
                           "User all received is: ${userCredential.value.user!}");
                       print(
                           "User email received is: ${userCredential.value.user!.email}");
-                    }else{
-                      print(
-                          "User all received is: null");
+                    } else {
+                      print("User all received is: null");
                     }
                   },
                   child: Container(

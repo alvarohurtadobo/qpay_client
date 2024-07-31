@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:qpay_client/common/toast.dart';
 import 'package:qpay_client/common/drawer.dart';
+import 'package:qpay_client/user/model/user.dart';
+import 'package:qpay_client/common/constants.dart';
 import 'package:qpay_client/common/responsive.dart';
+import 'package:qpay_client/common/services/repository.dart';
 
 class QrViewPage extends StatefulWidget {
   const QrViewPage({super.key});
@@ -10,6 +14,8 @@ class QrViewPage extends StatefulWidget {
 }
 
 class _QrViewPageState extends State<QrViewPage> {
+  bool loading = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -45,7 +51,33 @@ class _QrViewPageState extends State<QrViewPage> {
             const SizedBox(height: 40),
             GestureDetector(
               onTap: () {
-                Navigator.of(context).pushNamed('/home');
+                if(loading){
+                  return;
+                }
+                print("Cargar $amount pesos");
+                setState(() {
+                  loading = true;
+                });
+                apiService.postRequest("trx/registerapp", {
+                  "userId": currentUser.id,
+                  "detail": "Carga de Saldo",
+                  "amount": amount.toString(),
+                  "type": "CLIENT_CHARGE"
+                }).then((res) {
+                  if (res.statusCode == 201) {
+                    showToast("Carga exitosa");
+                    Navigator.of(context).pushNamed('/home');
+                  }
+                  setState(() {
+                    loading = false;
+                  });
+                }).catchError((err) {
+                  showToast("No se pudo realizar la recarga", error: true);
+                  Navigator.of(context).pushNamed('/home');
+                  setState(() {
+                    loading = false;
+                  });
+                });
               },
               child: Container(
                 width: Responsive.width - 2 * Responsive.padding,
@@ -55,13 +87,19 @@ class _QrViewPageState extends State<QrViewPage> {
                 decoration: const BoxDecoration(
                     color: Color(0xfff85f6a),
                     borderRadius: BorderRadius.all(Radius.circular(6))),
-                child: const Text(
-                  "Volver a inicio",
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18,
-                      color: Colors.white),
-                ),
+                child: loading
+                    ? const Center(
+                        child: CircularProgressIndicator(
+                          color: Colors.white,
+                        ),
+                      )
+                    : const Text(
+                        "Cargar y Volver a inicio",
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 18,
+                            color: Colors.white),
+                      ),
               ),
             ),
             const SizedBox(height: 20),

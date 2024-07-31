@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:qpay_client/user/model/user.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 Widget myDrawer(BuildContext context) {
@@ -6,25 +7,25 @@ Widget myDrawer(BuildContext context) {
     child: ListView(
       padding: EdgeInsets.zero,
       children: <Widget>[
-        const DrawerHeader(
+        DrawerHeader(
           child: Column(
             children: [
-              Center(
+              const Center(
                 child: CircleAvatar(
                   radius: 36,
                   backgroundImage: AssetImage('assets/images/user.png'),
                 ),
               ),
               Text(
-                'Johana Doe',
-                style: TextStyle(
+                currentUser.name,
+                style: const TextStyle(
                   color: Colors.grey,
                   fontSize: 24,
                 ),
               ),
               Text(
-                'johana@gmail.com',
-                style: TextStyle(
+                currentUser.email,
+                style: const TextStyle(
                   color: Colors.grey,
                   fontSize: 16,
                 ),
@@ -40,8 +41,16 @@ Widget myDrawer(BuildContext context) {
           },
         ),
         ListTile(
+          leading: const Icon(Icons.tag),
+          title: const Text('Mis manillas'),
+          onTap: () {
+            Navigator.of(context).pop();
+            Navigator.of(context).pushNamed('/tags');
+          },
+        ),
+        ListTile(
           leading: const Icon(Icons.device_unknown_outlined),
-          title: const Text('Registrar dispositivo'),
+          title: const Text('Registrar manilla'),
           onTap: () {
             Navigator.of(context).pop();
             Navigator.of(context).pushNamed('/register_device');
@@ -68,7 +77,7 @@ Widget myDrawer(BuildContext context) {
           title: const Text('Salir'),
           onTap: () {
             SharedPreferences.getInstance().then((prefs) {
-              prefs.remove('username');
+              // prefs.remove('username');
               prefs.remove('password');
               debugPrint("Cleared shared prefernces");
             });

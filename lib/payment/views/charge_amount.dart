@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:qpay_client/common/button.dart';
 import 'package:qpay_client/common/drawer.dart';
+import 'package:qpay_client/common/constants.dart';
 import 'package:qpay_client/common/responsive.dart';
 
 class ChargeAmountPage extends StatefulWidget {
@@ -11,8 +12,6 @@ class ChargeAmountPage extends StatefulWidget {
 }
 
 class _ChargeAmountPageState extends State<ChargeAmountPage> {
-  double amount = 0;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(

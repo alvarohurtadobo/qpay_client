@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:qpay_client/common/components/listTile.dart';
 import 'package:qpay_client/common/drawer.dart';
 import 'package:qpay_client/common/responsive.dart';
 import 'package:qpay_client/payment/model/transaction.dart';
+import 'package:qpay_client/common/components/listTile.dart';
 
 class TransactionHistoryPage extends StatefulWidget {
   const TransactionHistoryPage({super.key});
@@ -49,7 +49,7 @@ class _TransactionHistoryPageState extends State<TransactionHistoryPage> {
             // getTile("\$100.00", "Heladeria", "2024-05-08", Icons.timer),
             // getTile("\$30.00", "Panaderia", "2024-04-08", Icons.timer),
             Column(
-              children: myTransactions
+              children: myTransactions.reversed
                   .map(
                     (e) => getTile(
                         e.detail,

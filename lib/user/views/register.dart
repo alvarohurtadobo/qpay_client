@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:qpay_client/common/responsive.dart';
+import 'package:qpay_client/common/services/repository.dart';
 import 'package:qpay_client/common/toast.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -13,12 +15,22 @@ class _RegisterPageState extends State<RegisterPage> {
   bool hidden = true;
   final _formKey = GlobalKey<FormState>();
 
+  String email = '';
+  String firstname = '';
+  String surname = '';
+  String phone = '';
+  String password = '';
+
+  bool loading = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
+        width: Responsive.width,
+        height: Responsive.height,
         padding: EdgeInsets.all(Responsive.padding),
-        child: Column(children: [
+        child: ListView(children: [
           const SizedBox(height: 50),
           Container(
             width: Responsive.width - 2 * Responsive.padding,
@@ -49,13 +61,16 @@ class _RegisterPageState extends State<RegisterPage> {
                     width: Responsive.width - 2 * Responsive.padding,
                     alignment: Alignment.centerLeft,
                     child: const Text(
-                      "Usuario",
+                      "Email",
                       style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 14,
                           color: Color(0xfff85f6a)),
                     )),
                 TextFormField(
+                  onChanged: (val) {
+                    email = val;
+                  },
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return "Este campo es obligatorio";
@@ -76,6 +91,9 @@ class _RegisterPageState extends State<RegisterPage> {
                     )),
                 TextFormField(
                   obscureText: hidden,
+                  onChanged: (val) {
+                    password = val;
+                  },
                   validator: (value) {
                     if (value == null) {
                       return null;
@@ -112,6 +130,9 @@ class _RegisterPageState extends State<RegisterPage> {
                           color: Color(0xfff85f6a)),
                     )),
                 TextFormField(
+                  onChanged: (val) {
+                    firstname = val;
+                  },
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return "Este campo es obligatorio";
@@ -131,6 +152,9 @@ class _RegisterPageState extends State<RegisterPage> {
                           color: Color(0xfff85f6a)),
                     )),
                 TextFormField(
+                  onChanged: (val) {
+                    surname = val;
+                  },
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return "Este campo es obligatorio";
@@ -150,6 +174,9 @@ class _RegisterPageState extends State<RegisterPage> {
                           color: Color(0xfff85f6a)),
                     )),
                 TextFormField(
+                  onChanged: (val) {
+                    phone = val;
+                  },
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return "Este campo es obligatorio";
@@ -160,9 +187,39 @@ class _RegisterPageState extends State<RegisterPage> {
                 const SizedBox(height: 30),
                 GestureDetector(
                   onTap: () {
+                    if (loading) {
+                      return;
+                    }
                     bool? success = _formKey.currentState?.validate();
                     if (success == true) {
-                      showToast("Función aún no implementada", error: true);
+                      setState(() {
+                        loading = true;
+                      });
+                      apiService.postRequest('app/register', {
+                        "name": "$firstname $surname",
+                        "email": email,
+                        "password": password,
+                        "phone": phone
+                      }).then((res) {
+                        if (res.statusCode == 201) {
+                          showToast(
+                              "Usuario creado exitosamente, por favor inicie sesion");
+                          SharedPreferences.getInstance().then((prefs) {
+                            prefs.setString('username', email);
+                            Navigator.of(context).pushReplacementNamed('/');
+                          });
+                        }
+                        setState(() {
+                          loading = false;
+                        });
+                      }).catchError((err) {
+                        print("No se pudo crear usuario por error: $err");
+                        showToast("No se pudo crear", error: true);
+                        setState(() {
+                          loading = false;
+                        });
+                      });
+                      // showToast("Función aún no implementada", error: true);
                     }
                   },
                   child: Container(
@@ -174,13 +231,19 @@ class _RegisterPageState extends State<RegisterPage> {
                     decoration: const BoxDecoration(
                         color: Color(0xfff85f6a),
                         borderRadius: BorderRadius.all(Radius.circular(6))),
-                    child: const Text(
-                      "Registrarse",
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18,
-                          color: Colors.white),
-                    ),
+                    child: loading
+                        ? const Center(
+                            child: CircularProgressIndicator(
+                              color: Colors.white,
+                            ),
+                          )
+                        : const Text(
+                            "Registrarse",
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 18,
+                                color: Colors.white),
+                          ),
                   ),
                 ),
               ],

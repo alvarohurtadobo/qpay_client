@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:qpay_client/common/toast.dart';
 import 'package:qpay_client/common/drawer.dart';
+import 'package:qpay_client/user/model/user.dart';
+import 'package:qpay_client/payment/model/tag.dart';
 import 'package:qpay_client/common/responsive.dart';
 import 'package:qpay_client/common/services/repository.dart';
-import 'package:qpay_client/common/toast.dart';
-import 'package:qpay_client/payment/model/tag.dart';
-import 'package:qpay_client/user/model/user.dart';
 
 class RegisterDevicePage extends StatefulWidget {
   const RegisterDevicePage({super.key});
@@ -16,6 +16,7 @@ class RegisterDevicePage extends StatefulWidget {
 class _RegisterDevicePageState extends State<RegisterDevicePage> {
   String tagNumber = '';
   String tagCode = '';
+  bool loading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -86,7 +87,13 @@ class _RegisterDevicePageState extends State<RegisterDevicePage> {
             const SizedBox(height: 20),
             GestureDetector(
               onTap: () {
+                if (loading) {
+                  return;
+                }
                 if (tagNumber.isNotEmpty && tagCode.isNotEmpty) {
+                  setState(() {
+                    loading = true;
+                  });
                   apiService.postRequest('tag/register', {
                     "userId": currentUser.id,
                     "tagId": tagNumber,
@@ -102,16 +109,21 @@ class _RegisterDevicePageState extends State<RegisterDevicePage> {
                           state: 'ACTIVE',
                           balance: '0.00',
                           trxApps: []));
-                      setState(() {});
+                      setState(() {
+                        loading = false;
+                      });
+                      Navigator.of(context).pushNamed('/device_registered');
                     } else {
                       showToast("No se pudo registrar", error: true);
                     }
                   }).catchError((err) {
                     print("Error is $err");
                     showToast("Error, No se pudo registrar", error: true);
+                    setState(() {
+                      loading = false;
+                    });
                   });
                 }
-                Navigator.of(context).pushNamed('/device_registered');
               },
               child: Container(
                 width: Responsive.width - 2 * Responsive.padding,
@@ -121,13 +133,19 @@ class _RegisterDevicePageState extends State<RegisterDevicePage> {
                 decoration: const BoxDecoration(
                     color: Color(0xfff85f6a),
                     borderRadius: BorderRadius.all(Radius.circular(6))),
-                child: const Text(
-                  "Escanear dispositivo",
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18,
-                      color: Colors.white),
-                ),
+                child: loading
+                    ? const Center(
+                        child: CircularProgressIndicator(
+                          color: Colors.white,
+                        ),
+                      )
+                    : const Text(
+                        "Registrar manilla",
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 18,
+                            color: Colors.white),
+                      ),
               ),
             ),
           ],

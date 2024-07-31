@@ -251,6 +251,7 @@ class _LoginPageState extends State<LoginPage> {
                         SharedPreferences.getInstance().then((prefs) {
                           prefs.setString(
                               'username', userCredential.value.user!.email);
+                          prefs.setString('password', "12345678");
                           Navigator.of(context).pushReplacementNamed('/home');
                         });
                       }).catchError((err) {
@@ -258,9 +259,11 @@ class _LoginPageState extends State<LoginPage> {
                         setState(() {
                           loading = false;
                         });
+                        showToast("Usuario registrado previamente, ingresando");
                         SharedPreferences.getInstance().then((prefs) {
                           prefs.setString(
                               'username', userCredential.value.user!.email);
+                          prefs.setString('password', "12345678");
                           Navigator.of(context).pushReplacementNamed('/home');
                         });
                       });

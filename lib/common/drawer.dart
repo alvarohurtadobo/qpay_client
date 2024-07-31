@@ -18,6 +18,7 @@ Widget myDrawer(BuildContext context) {
               ),
               Text(
                 currentUser.name,
+                maxLines: 1,
                 style: const TextStyle(
                   color: Colors.grey,
                   fontSize: 24,

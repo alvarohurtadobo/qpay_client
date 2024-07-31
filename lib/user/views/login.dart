@@ -221,12 +221,49 @@ class _LoginPageState extends State<LoginPage> {
               children: [
                 GestureDetector(
                   onTap: () async {
+                    if (loading) {
+                      return;
+                    }
+                    setState(() {
+                      loading = true;
+                    });
                     userCredential.value = await signInWithGoogle();
                     if (userCredential.value != null) {
+                      // print(
+                      //     "User all received is: ${userCredential.value.user!}");
                       print(
-                          "User all received is: ${userCredential.value.user!}");
-                      print(
-                          "User email received is: ${userCredential.value.user!.email}");
+                          "Registering with googleUser email received is: ${userCredential.value.user!.email}, name: ${userCredential.value.user!.displayName}, phone: ${userCredential.value.user!.phoneNumber}");
+                      apiService.postRequest('app/register', {
+                        "name": userCredential.value.user!.displayName,
+                        "email": userCredential.value.user!.email,
+                        "password": "12345678",
+                        "phone": userCredential.value.user!.phoneNumber ?? ""
+                      }).then((res) {
+                        if (res.statusCode == 201) {
+                          showToast("Usuario creado");
+                        }
+                        if (res.statusCode == 400) {
+                          showToast("Usuario identificado");
+                        }
+                        setState(() {
+                          loading = false;
+                        });
+                        SharedPreferences.getInstance().then((prefs) {
+                          prefs.setString(
+                              'username', userCredential.value.user!.email);
+                          Navigator.of(context).pushReplacementNamed('/home');
+                        });
+                      }).catchError((err) {
+                        print("Google login error is: $err");
+                        setState(() {
+                          loading = false;
+                        });
+                        SharedPreferences.getInstance().then((prefs) {
+                          prefs.setString(
+                              'username', userCredential.value.user!.email);
+                          Navigator.of(context).pushReplacementNamed('/home');
+                        });
+                      });
                     } else {
                       print("User all received is: null");
                     }

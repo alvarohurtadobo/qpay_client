@@ -24,7 +24,9 @@ class _RegisteredTagsPageState extends State<RegisteredTagsPage> {
       drawer: myDrawer(context),
       body: Container(
         padding: EdgeInsets.symmetric(vertical: Responsive.padding),
-        child: Column(
+        width: Responsive.width,
+        height: Responsive.height,
+        child: ListView(
           children: [
             const SizedBox(height: 50),
             Container(
@@ -34,12 +36,16 @@ class _RegisteredTagsPageState extends State<RegisteredTagsPage> {
                   image: DecorationImage(
                       image: AssetImage('assets/images/cloud.png'))),
             ),
-            const Text(
-              "qpay",
-              style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16,
-                  color: Colors.grey),
+            Container(
+              width: Responsive.width,
+              alignment: Alignment.center,
+              child: const Text(
+                "qpay",
+                style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                    color: Colors.grey),
+              ),
             ),
             const SizedBox(height: 40),
             Column(

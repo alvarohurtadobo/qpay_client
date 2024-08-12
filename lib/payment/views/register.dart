@@ -73,7 +73,7 @@ class _RegisterDevicePageState extends State<RegisterDevicePage> {
                       color: Colors.grey,
                       borderRadius: BorderRadius.all(Radius.circular(6))),
                   child: const Text(
-                    "Escanear dispositivo",
+                    "Escanear manilla",
                     textAlign: TextAlign.center,
                     style: TextStyle(
                         fontWeight: FontWeight.bold,

@@ -11,6 +11,7 @@ class BarcodeScannerSimple extends StatefulWidget {
 
 class _BarcodeScannerSimpleState extends State<BarcodeScannerSimple> {
   Barcode? _barcode;
+  bool oneDetected = false;
 
   Widget _buildBarcode(Barcode? value) {
     if (value == null) {
@@ -35,15 +36,19 @@ class _BarcodeScannerSimpleState extends State<BarcodeScannerSimple> {
     if (mounted) {
       setState(() {
         _barcode = barcodes.barcodes.firstOrNull;
-
-        if (_barcode != null) {
-          print("Detected _barcode : ${_barcode!.rawValue}");
-          detectedCode = _barcode!.rawValue ?? "";
-          Navigator.of(context).pop();
-        } else {
-          Navigator.of(context).pop();
-        }
       });
+
+      if (_barcode != null) {
+        print("Detected _barcode : ${_barcode!.rawValue}");
+        detectedCode = _barcode!.rawValue ?? "";
+        // Navigator.of(context).pop();
+      }
+      if (!oneDetected) {
+        Navigator.of(context).pop();
+        oneDetected = true;
+      }else{
+        print("Detected _barcode pass");
+      }
     }
   }
 

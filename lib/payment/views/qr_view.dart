@@ -30,7 +30,7 @@ class _QrViewPageState extends State<QrViewPage> {
     });
     apiService.postRequest('pay/generateqr',
         {"userId": currentUser.id, "amount": amount.toString()}).then((res) {
-      if (res.statusCode == 200) {
+      if (res.statusCode == 201) {
         base64ImageString = res.data['imagenQR'] ?? "";
         setState(() {
           hasImage = true;
@@ -81,7 +81,7 @@ class _QrViewPageState extends State<QrViewPage> {
                                 ? MemoryImage(bytes!)
                                 : const AssetImage('assets/images/qr.jpeg'))),
                   )
-                : const Text("Error imagen QR"),
+                : const Center(child: CircularProgressIndicator(),),
             const SizedBox(height: 40),
             GestureDetector(
               onTap: () {

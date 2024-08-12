@@ -10,6 +10,7 @@ import 'package:qpay_client/payment/views/charge_amount.dart';
 import 'package:qpay_client/user/views/recover_passwords.dart';
 import 'package:qpay_client/payment/views/registered_tags.dart';
 import 'package:qpay_client/payment/views/last_transactions.dart';
+import 'package:qpay_client/user/views/scanner.dart';
 
 Route<dynamic> onGenerateRoute(RouteSettings settings) {
   switch (settings.name) {
@@ -35,6 +36,8 @@ Route<dynamic> onGenerateRoute(RouteSettings settings) {
       return MaterialPageRoute(builder: (_) => const QrViewPage());
     case '/tag':
       return MaterialPageRoute(builder: (_) => const TagTransactionsPage());
+    case '/scanner':
+      return MaterialPageRoute(builder: (_) => const BarcodeScannerSimple());
     default:
       return _errorRoute();
   }

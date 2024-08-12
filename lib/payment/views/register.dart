@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:qpay_client/common/toast.dart';
 import 'package:qpay_client/common/drawer.dart';
 import 'package:qpay_client/user/model/user.dart';
+import 'package:qpay_client/common/constants.dart';
 import 'package:qpay_client/payment/model/tag.dart';
 import 'package:qpay_client/common/responsive.dart';
 import 'package:qpay_client/common/services/repository.dart';
@@ -17,6 +18,7 @@ class _RegisterDevicePageState extends State<RegisterDevicePage> {
   String tagNumber = '';
   String tagCode = '';
   bool loading = false;
+  TextEditingController controller = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -49,29 +51,41 @@ class _RegisterDevicePageState extends State<RegisterDevicePage> {
               ),
             ),
             const SizedBox(height: 20),
-            Container(
-              width: Responsive.width,
-              alignment: Alignment.center,
+            GestureDetector(
+              onTap: () {
+                Navigator.of(context).pushNamed('/scanner').then((res) {
+                  if (detectedCode != "") {
+                    print("Received code $detectedCode");
+                    controller.text = detectedCode;
+                    detectedCode = "";
+                  }
+                });
+              },
               child: Container(
-                width: Responsive.width / 2,
-                height: Responsive.width / 2,
+                width: Responsive.width,
                 alignment: Alignment.center,
-                padding: EdgeInsets.symmetric(horizontal: Responsive.padding),
-                decoration: const BoxDecoration(
-                    color: Colors.grey,
-                    borderRadius: BorderRadius.all(Radius.circular(6))),
-                child: const Text(
-                  "Escanear dispositivo",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18,
-                      color: Colors.white),
+                child: Container(
+                  width: Responsive.width / 2,
+                  height: Responsive.width / 2,
+                  alignment: Alignment.center,
+                  padding: EdgeInsets.symmetric(horizontal: Responsive.padding),
+                  decoration: const BoxDecoration(
+                      color: Colors.grey,
+                      borderRadius: BorderRadius.all(Radius.circular(6))),
+                  child: const Text(
+                    "Escanear dispositivo",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18,
+                        color: Colors.white),
+                  ),
                 ),
               ),
             ),
             const SizedBox(height: 10),
             TextField(
+              controller: controller,
               onChanged: (val) {
                 tagNumber = val;
               },

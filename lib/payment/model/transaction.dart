@@ -1,10 +1,10 @@
 class Transaction {
-  DateTime dateAdd;
-  String detail;
-  String amount;
-  double amountDouble;
-  String state;
-  String code;
+  late DateTime dateAdd;
+  late String detail;
+  late String amount;
+  late double amountDouble;
+  late String state;
+  late String code;
 
   Transaction({
     required this.dateAdd,
@@ -22,13 +22,22 @@ class Transaction {
         state = '',
         code = '';
 
-  Transaction.fromJson(Map<String, dynamic> data)
-      : dateAdd = DateTime.parse(data['dateAdd'] ?? DateTime.now().toIso8601String()),
-        detail = data['detail'] ?? '',
-        amount = data['amount'] ?? '0.00',
-        amountDouble = double.tryParse(data['amount']) ?? 0,
-        state = data['state'] ?? '',
-        code = data['code'] ?? '';
+  Transaction.fromJson(Map<String, dynamic> data, {bool debug = false}) {
+    if (debug) {
+      print("Arrived data (${data['code']}): $data");
+    }
+    dateAdd =
+        DateTime.parse(data['dateAdd'] ?? DateTime.now().toIso8601String());
+    detail = data['detail'] ?? '';
+    amount = data['amount'] ?? '0.00';
+    amountDouble = double.tryParse(data['amount']) ?? 0;
+    state = data['state'] ?? '';
+    code = data['code'] ?? '';
+
+    if (debug) {
+      print("Arrived data conv: ${toString()}");
+    }
+  }
 
   @override
   String toString() {

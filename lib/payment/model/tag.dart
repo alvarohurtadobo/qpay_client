@@ -1,13 +1,15 @@
+import 'package:qpay_client/payment/model/transaction.dart';
+
 class Tag {
-  String id;
-  DateTime dateAdd;
-  String tagId;
-  String code;
-  bool disabled;
-  String state;
-  String balance;
-  double balanceDouble;
-  List<dynamic> trxApps;
+  late String id;
+  late DateTime dateAdd;
+  late String tagId;
+  late String code;
+  late bool disabled;
+  late String state;
+  late String balance;
+  late double balanceDouble;
+  late List<Transaction> trxApps = [];
 
   Tag(
       {required this.id,
@@ -31,16 +33,24 @@ class Tag {
         balanceDouble = 0,
         trxApps = [];
 
-  Tag.fromJson(Map<String, dynamic> data)
-      : id = data['id'] ?? '',
-        dateAdd = DateTime.parse(data['dateAdd'] ?? DateTime.now().toIso8601String()),
-        tagId = data['tagId'] ?? '',
-        code = data['code'] ?? '',
-        disabled = data['disabled'] ?? false,
-        state = data['state'] ?? '',
-        balance = data['balance'] ?? '0.00',
-        balanceDouble = double.tryParse(data['balance']) ?? 0,
-        trxApps = data['trxApps'] ?? [];
+  Tag.fromJson(Map<String, dynamic> data) {
+    List<dynamic> txTag = data['trxApps']??[];
+    print("Tag trans are: $txTag");
+    id = data['id'] ?? '';
+    dateAdd =
+        DateTime.parse(data['dateAdd'] ?? DateTime.now().toIso8601String());
+    tagId = data['tagId'] ?? '';
+    code = data['code'] ?? '';
+    disabled = data['disabled'] ?? false;
+    state = data['state'] ?? '';
+    balance = data['balance'] ?? '0.00';
+    balanceDouble = double.tryParse(data['balance']) ?? 0;
+    trxApps = txTag
+        .map<Transaction>(
+          (e) => Transaction.fromJson(e, debug: true),
+        )
+        .toList();
+  }
 
   @override
   String toString() {
@@ -49,3 +59,5 @@ class Tag {
 }
 
 List<Tag> myTags = [];
+
+String currentTag = '';

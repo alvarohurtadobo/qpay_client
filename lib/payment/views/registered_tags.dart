@@ -47,20 +47,9 @@ class _RegisteredTagsPageState extends State<RegisteredTagsPage> {
                             e.dateAdd.toIso8601String().substring(0, 10),
                             Icons.tag,
                             !e.disabled, () {
-                          print("Unregister tagId: ${e.id}");
-                          apiService.patchRequest('tag/unregister',
-                              {"tagId": e.id}).then((response) {
-                            if (response.statusCode == 200) {
-                              setState(() {
-                                myTags
-                                    .firstWhere((t) => t.tagId == e.tagId)
-                                    .disabled = true;
-                              });
-                            } else {
-                              showToast("No se pudo dar de baja la manilla",
-                                  error: true);
-                            }
-                          });
+                          currentTag = e.id;
+                          print("Selecting tagId: $currentTag");
+                          Navigator.of(context).pushNamed('/tag');
                         }))
                     .toList())
           ],

@@ -38,11 +38,13 @@ class _HomePageState extends State<HomePage> {
                     (e) => Tag.fromJson(e),
                   )
                   .toList();
-                  myTransactions = myTransactionsString.map(
+              myTransactions = myTransactionsString
+                  .map(
                     (e) => Transaction.fromJson(e),
                   )
                   .toList();
-              print("Received user: $currentUser, with ${myTags.length} tags and with ${myTransactions.length} transactions");
+              print(
+                  "Received user: $currentUser, with ${myTags.length} tags and with ${myTransactions.length} transactions");
             });
           } else {
             showToast("No se pudo descargar la informacion de usuario",

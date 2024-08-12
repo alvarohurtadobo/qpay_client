@@ -43,11 +43,6 @@ class _TransactionHistoryPageState extends State<TransactionHistoryPage> {
               ),
             ),
             const SizedBox(height: 40),
-            // getTile("\$300.00", "Supermercado Fidalga", "2024-07-01",
-            //     Icons.pending),
-            // getTile("\$200.00", "Supermercado Ktal", "2024-06-08", Icons.timer),
-            // getTile("\$100.00", "Heladeria", "2024-05-08", Icons.timer),
-            // getTile("\$30.00", "Panaderia", "2024-04-08", Icons.timer),
             Column(
               children: myTransactions.reversed
                   .map(

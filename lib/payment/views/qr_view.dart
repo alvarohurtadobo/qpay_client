@@ -1,3 +1,5 @@
+import 'dart:convert';
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:qpay_client/common/toast.dart';
 import 'package:qpay_client/common/drawer.dart';
@@ -15,9 +17,37 @@ class QrViewPage extends StatefulWidget {
 
 class _QrViewPageState extends State<QrViewPage> {
   bool loading = false;
+  bool loadingQR = false;
+  bool hasImage = false;
+  String base64ImageString = "";
+  Uint8List? bytes;
+
+  @override
+  void initState() {
+    super.initState();
+    setState(() {
+      loadingQR = true;
+    });
+    apiService.postRequest('pay/generateqr',
+        {"userId": currentUser.id, "amount": amount.toString()}).then((res) {
+      if (res.statusCode == 200) {
+        base64ImageString = res.data['imagenQR'] ?? "";
+        setState(() {
+          hasImage = true;
+        });
+      }
+      setState(() {
+        loadingQR = false;
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
+    if (base64ImageString != "") {
+      bytes = const Base64Decoder().convert(base64ImageString);
+    }
+
     return Scaffold(
       appBar: AppBar(),
       drawer: myDrawer(context),
@@ -41,17 +71,21 @@ class _QrViewPageState extends State<QrViewPage> {
                   color: Colors.grey),
             ),
             const SizedBox(height: 20),
-            Container(
-              width: 200,
-              height: 200,
-              decoration: const BoxDecoration(
-                  image: DecorationImage(
-                      image: AssetImage('assets/images/qr.jpeg'))),
-            ),
+            hasImage
+                ? Container(
+                    width: 200,
+                    height: 200,
+                    decoration: BoxDecoration(
+                        image: DecorationImage(
+                            image: bytes != null
+                                ? MemoryImage(bytes!)
+                                : const AssetImage('assets/images/qr.jpeg'))),
+                  )
+                : const Text("Error imagen QR"),
             const SizedBox(height: 40),
             GestureDetector(
               onTap: () {
-                if(loading){
+                if (loading) {
                   return;
                 }
                 print("Cargar $amount pesos");

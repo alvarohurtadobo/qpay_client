@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:qpay_client/payment/views/charge_tag.dart';
 import 'package:qpay_client/payment/views/tag_transactions.dart';
 import 'package:qpay_client/user/views/home.dart';
 import 'package:qpay_client/user/views/login.dart';
@@ -32,6 +33,8 @@ Route<dynamic> onGenerateRoute(RouteSettings settings) {
       return MaterialPageRoute(builder: (_) => const RegisteredTagsPage());
     case '/charge_amount':
       return MaterialPageRoute(builder: (_) => const ChargeAmountPage());
+    case '/charge_tag':
+      return MaterialPageRoute(builder: (_) => const ChargeTagPage());
     case '/qr_view':
       return MaterialPageRoute(builder: (_) => const QrViewPage());
     case '/tag':

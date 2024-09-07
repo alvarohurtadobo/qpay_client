@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:qpay_client/common/toast.dart';
@@ -81,7 +82,9 @@ class _QrViewPageState extends State<QrViewPage> {
                                 ? MemoryImage(bytes!)
                                 : const AssetImage('assets/images/qr.jpeg'))),
                   )
-                : const Center(child: CircularProgressIndicator(),),
+                : const Center(
+                    child: CircularProgressIndicator(),
+                  ),
             const SizedBox(height: 40),
             GestureDetector(
               onTap: () {
@@ -92,9 +95,11 @@ class _QrViewPageState extends State<QrViewPage> {
                 setState(() {
                   loading = true;
                 });
+                var random = Random();
+                int randomNumber = random.nextInt(10000) + 1;
                 apiService.postRequest("trx/registerapp", {
                   "userId": currentUser.id,
-                  "detail": "Carga de Saldo",
+                  "detail": "Carga de Saldo $randomNumber",
                   "amount": amount.toString(),
                   "type": "CLIENT_CHARGE"
                 }).then((res) {

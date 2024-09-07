@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 
-Widget getTile(
-    String title, String subtitle, String trailMessage, IconData icon) {
+Widget getTile(String title, String subtitle, String trailMessage, String type,
+    IconData icon) {
+  bool isNegative = type == "POS_CHARGE";
+  double value = double.tryParse(trailMessage) ?? 0;
+  if (isNegative) {
+    value = -value;
+  }
   return Container(
     margin: const EdgeInsets.only(bottom: 10),
     decoration: const BoxDecoration(
@@ -14,7 +19,11 @@ Widget getTile(
         style: const TextStyle(fontWeight: FontWeight.bold),
       ),
       subtitle: Text(subtitle),
-      trailing: Text(trailMessage),
+      trailing: Text(
+        value.toStringAsFixed(2),
+        style: TextStyle(
+            fontSize: 18, color: isNegative ? Colors.red : Colors.grey),
+      ),
     ),
   );
 }

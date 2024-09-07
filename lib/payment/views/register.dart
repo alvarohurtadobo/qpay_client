@@ -56,6 +56,7 @@ class _RegisterDevicePageState extends State<RegisterDevicePage> {
                 Navigator.of(context).pushNamed('/scanner').then((res) {
                   if (detectedCode != "") {
                     print("Received code $detectedCode");
+                    tagNumber = detectedCode;
                     controller.text = detectedCode;
                     detectedCode = "";
                   }

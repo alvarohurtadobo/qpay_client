@@ -34,7 +34,7 @@ class Tag {
         trxApps = [];
 
   Tag.fromJson(Map<String, dynamic> data) {
-    List<dynamic> txTag = data['trxApps']??[];
+    List<dynamic> txTag = data['trxApps'] ?? [];
     print("Tag trans are: $txTag");
     id = data['id'] ?? '';
     dateAdd =
@@ -59,5 +59,6 @@ class Tag {
 }
 
 List<Tag> myTags = [];
+Tag myTag = Tag.empty();
 
 String currentTag = '';

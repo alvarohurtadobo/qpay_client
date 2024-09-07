@@ -53,7 +53,8 @@ class _RegisteredTagsPageState extends State<RegisteredTagsPage> {
                     .map((e) => getTagTile(
                             e.code,
                             e.tagId,
-                            e.dateAdd.toIso8601String().substring(0, 10),
+                            //e.dateAdd.toIso8601String().substring(0, 10),
+                            e.balance,
                             Icons.tag,
                             !e.disabled, () {
                           currentTag = e.id;

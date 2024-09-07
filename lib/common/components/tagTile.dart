@@ -18,7 +18,7 @@ Widget getTagTile(String title, String subtitle, String trailMessage,
       ),
       subtitle: Text(subtitle),
       trailing: Text(
-          trailMessage), //active ? const Icon(Icons.delete) : Text(trailMessage),
+          trailMessage, style: const TextStyle(fontSize: 21, color: Color(0xfff85f6a)),), //active ? const Icon(Icons.delete) : Text(trailMessage),
       onTap: callback,
     ),
   );

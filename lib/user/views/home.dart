@@ -93,7 +93,23 @@ class _HomePageState extends State<HomePage> {
             const SizedBox(height: 20),
             const Text("Bienvenido a QPay"),
             const SizedBox(height: 20),
-            const Text("Tu balance es"),
+            const Text("Balance total:"),
+            const SizedBox(height: 10),
+            loading
+                ? const Center(
+                    child: CircularProgressIndicator(
+                      color: Color(0xfff85f6a),
+                    ),
+                  )
+                : Text(
+                    currentUser.balanceTotal,
+                    style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 24,
+                        color: Color(0xfff85f6a)),
+                  ),
+            const SizedBox(height: 20),
+            const Text("Balance sin asignar:"),
             const SizedBox(height: 10),
             loading
                 ? const Center(

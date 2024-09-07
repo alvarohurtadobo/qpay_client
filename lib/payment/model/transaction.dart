@@ -5,14 +5,16 @@ class Transaction {
   late double amountDouble;
   late String state;
   late String code;
+  late String type;
 
-  Transaction({
-    required this.dateAdd,
-    required this.detail,
-    required this.amount,
-    required this.state,
-    required this.code,
-  }) : amountDouble = double.tryParse(amount) ?? 0;
+  Transaction(
+      {required this.dateAdd,
+      required this.detail,
+      required this.amount,
+      required this.state,
+      required this.code,
+      required this.type})
+      : amountDouble = double.tryParse(amount) ?? 0;
 
   Transaction.empty()
       : dateAdd = DateTime.now(),
@@ -20,7 +22,8 @@ class Transaction {
         amount = '0.00',
         amountDouble = 0,
         state = '',
-        code = '';
+        code = '',
+        type = "TAG_CHARGE";
 
   Transaction.fromJson(Map<String, dynamic> data, {bool debug = false}) {
     if (debug) {
@@ -33,6 +36,12 @@ class Transaction {
     amountDouble = double.tryParse(data['amount']) ?? 0;
     state = data['state'] ?? '';
     code = data['code'] ?? '';
+
+    try {
+      type = data['trxType']['code'] ?? "TAG_CHARGE";
+    } catch (err) {
+      print("Unable to load transaction type");
+    }
 
     if (debug) {
       print("Arrived data conv: ${toString()}");

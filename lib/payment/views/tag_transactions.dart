@@ -18,7 +18,6 @@ class TagTransactionsPage extends StatefulWidget {
 
 class _TagTransactionsPageState extends State<TagTransactionsPage> {
   bool loading = false;
-  Tag myTag = Tag.empty();
 
   @override
   void initState() {
@@ -112,14 +111,14 @@ class _TagTransactionsPageState extends State<TagTransactionsPage> {
             loading
                 ? SizedBox(
                     width: Responsive.width,
-                    height: 120,
+                    height: 142,
                     child: const Center(
                       child: CircularProgressIndicator(),
                     ),
                   )
                 : SizedBox(
                     width: Responsive.width,
-                    height: 120,
+                    height: 142,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
@@ -128,6 +127,96 @@ class _TagTransactionsPageState extends State<TagTransactionsPage> {
                           style: const TextStyle(fontSize: 21),
                         ),
                         Text(myTag.tagId),
+                        Text(
+                          myTag.balance,
+                          style: const TextStyle(fontSize: 20),
+                        ),
+                        myTag.disabled
+                            ? const SizedBox.shrink()
+                            : GestureDetector(
+                                onTap: () {
+                                  Navigator.pushNamed(context, '/charge_tag')
+                                      .then((res) {
+                                    SharedPreferences.getInstance()
+                                        .then((prefs) {
+                                      String username =
+                                          prefs.getString('username') ?? "";
+                                      if (username.isNotEmpty) {
+                                        setState(() {
+                                          loading = true;
+                                        });
+                                        apiService.postRequest('user/profile', {
+                                          "email": username
+                                        }).then((response) {
+                                          if (response.statusCode == 200) {
+                                            setState(() {
+                                              currentUser =
+                                                  User.fromJson(response.data);
+                                              List<dynamic> myTagsString =
+                                                  response.data['tags'];
+                                              List<dynamic>
+                                                  myTransactionsString =
+                                                  response.data['trxApps'];
+                                              myTags = myTagsString
+                                                  .map(
+                                                    (e) => Tag.fromJson(e),
+                                                  )
+                                                  .toList();
+                                              print("All tags are: ${myTags.map(
+                                                (e) => e.id,
+                                              )} currentTag: $currentTag contains: ${myTags.map(
+                                                    (e) => e.id,
+                                                  ).contains(currentTag)}");
+                                              //(d173450d-f24f-4528-bdc6-9593e1351ef9, ea6fa33a-f1cf-4a71-a5fe-f0c0208248e9, 1ce14021-7a5b-4d4a-b931-2b2221a176d0, ..., a6cfff5f-4176-492e-9eeb-05ca3a87c2a3, ae601ce0-6368-4a62-963a-cee39e31a112)
+                                              myTag = myTags.firstWhere(
+                                                  (e) => e.id == currentTag,
+                                                  orElse: () {
+                                                showToast("Could not find tag",
+                                                    error: true);
+                                                return Tag.empty();
+                                              });
+                                              myTransactions =
+                                                  myTransactionsString
+                                                      .map(
+                                                        (e) => Transaction
+                                                            .fromJson(e),
+                                                      )
+                                                      .toList();
+                                              print(
+                                                  "Received user: $currentUser, with ${myTags.length} tags and with ${myTransactions.length} transactions");
+                                            });
+                                          } else {
+                                            showToast(
+                                                "No se pudo descargar la informacion de usuario",
+                                                error: true);
+                                          }
+                                          setState(() {
+                                            loading = false;
+                                          });
+                                        }).catchError((err) {
+                                          print("Error is $err");
+                                          showToast(
+                                              "No se pudo descargar la informacion de usuario",
+                                              error: true);
+                                          setState(() {
+                                            loading = false;
+                                          });
+                                        });
+                                      }
+                                    });
+                                  });
+                                },
+                                child: Container(
+                                    padding: EdgeInsets.symmetric(
+                                        vertical: 2, horizontal: 10),
+                                    decoration: const BoxDecoration(
+                                        color: Color(0xfff85f6a),
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(4))),
+                                    child: const Text(
+                                      "Cargar",
+                                      style: TextStyle(color: Colors.white),
+                                    ))),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
@@ -191,6 +280,7 @@ class _TagTransactionsPageState extends State<TagTransactionsPage> {
                             .substring(0, 16)
                             .replaceAll("T", ' '),
                         e.amount,
+                        e.type,
                         Icons.timer),
                   )
                   .toList(),

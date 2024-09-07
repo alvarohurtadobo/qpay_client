@@ -36,7 +36,7 @@ class _DeviceRegisteredPageState extends State<DeviceRegisteredPage> {
             ),
             const SizedBox(height: 40),
             const Text(
-                  "El disositivo se ha agregado de manera exitosa",
+                  "El dispositivo se ha agregado de manera exitosa",
                   textAlign: TextAlign.center,
                   style: TextStyle(
                       fontWeight: FontWeight.bold,

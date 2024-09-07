@@ -48,8 +48,12 @@ class _TransactionHistoryPageState extends State<TransactionHistoryPage> {
                   .map(
                     (e) => getTile(
                         e.detail,
-                        e.dateAdd.toIso8601String().substring(0, 16).replaceAll("T", ' '),
+                        e.dateAdd
+                            .toIso8601String()
+                            .substring(0, 16)
+                            .replaceAll("T", ' '),
                         e.amount,
+                        e.type,
                         Icons.timer),
                   )
                   .toList(),

@@ -6,6 +6,8 @@ class User {
   String avatar = '';
   String balance = '0.00';
   double balanceDouble = 0;
+  String balanceTotal = '0.00';
+  double balanceTotalDouble = 0;
 
   User(this.id, this.email, this.name, this.phone, this.avatar, this.balance) {
     balanceDouble = double.tryParse(balance) ?? 0;
@@ -18,8 +20,10 @@ class User {
     name = data['name'] ?? "";
     phone = data['phone'] ?? "";
     avatar = data['avatar'] ?? "";
-    balance = data['balance'] ?? "";
+    balance = data['balance'] ?? "0.00";
+    balanceTotal = data['balanceTotal'] ?? "0.00";
     balanceDouble = double.tryParse(balance) ?? 0;
+    balanceTotalDouble = double.tryParse(balanceTotal) ?? 0;
   }
 
   @override

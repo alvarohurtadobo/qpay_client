@@ -31,7 +31,7 @@ class _RegisterPageState extends State<RegisterPage> {
         height: Responsive.height,
         padding: EdgeInsets.all(Responsive.padding),
         child: ListView(children: [
-          const SizedBox(height: 50),
+          // const SizedBox(height: 30),
           Container(
             width: Responsive.width - 2 * Responsive.padding,
             height: 100,

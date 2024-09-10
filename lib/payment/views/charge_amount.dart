@@ -18,10 +18,12 @@ class _ChargeAmountPageState extends State<ChargeAmountPage> {
       appBar: AppBar(),
       drawer: myDrawer(context),
       body: Container(
+        width: Responsive.width,
+        height: Responsive.height,
         padding: EdgeInsets.all(Responsive.padding),
-        child: Column(
+        child: ListView(
           children: [
-            const SizedBox(height: 50),
+            // const SizedBox(height: 30),
             Container(
               width: Responsive.width - 2 * Responsive.padding,
               height: 100,
@@ -29,12 +31,16 @@ class _ChargeAmountPageState extends State<ChargeAmountPage> {
                   image: DecorationImage(
                       image: AssetImage('assets/images/cloud.png'))),
             ),
-            const Text(
-              "qpay",
-              style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16,
-                  color: Colors.grey),
+            Container(
+              width: Responsive.width - 2 * Responsive.padding,
+              alignment: Alignment.center,
+              child: const Text(
+                "qpay",
+                style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                    color: Colors.grey),
+              ),
             ),
             const SizedBox(height: 20),
             Container(

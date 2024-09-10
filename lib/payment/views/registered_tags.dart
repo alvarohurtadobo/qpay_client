@@ -28,7 +28,7 @@ class _RegisteredTagsPageState extends State<RegisteredTagsPage> {
         height: Responsive.height,
         child: ListView(
           children: [
-            const SizedBox(height: 50),
+            // const SizedBox(height: 30),
             Container(
               width: Responsive.width,
               height: 100,

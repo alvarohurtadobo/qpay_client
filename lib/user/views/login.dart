@@ -51,7 +51,7 @@ class _LoginPageState extends State<LoginPage> {
         padding: EdgeInsets.all(Responsive.padding),
         child: Column(
           children: [
-            const SizedBox(height: 50),
+            const SizedBox(height: 30),
             Container(
               width: Responsive.width - 2 * Responsive.padding,
               height: 100,

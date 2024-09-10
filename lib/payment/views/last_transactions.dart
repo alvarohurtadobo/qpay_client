@@ -23,7 +23,7 @@ class _TransactionHistoryPageState extends State<TransactionHistoryPage> {
         padding: EdgeInsets.symmetric(vertical: Responsive.padding),
         child: ListView(
           children: [
-            const SizedBox(height: 50),
+            // const SizedBox(height: 30),
             Container(
               width: Responsive.width,
               height: 100,
